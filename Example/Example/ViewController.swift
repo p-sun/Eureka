@@ -93,11 +93,23 @@ class HomeViewController : FormViewController {
                     row.presentationMode = .SegueName(segueName: "ListSectionsControllerSegue", completionCallback: nil)
                 }
         +++ Section()
+            
                 <<< ButtonRow() { (row: ButtonRow) -> Void in
                    row.title = "About"
-                }  .onCellSelection({ (cell, row) in
+                }  .onCellSelection{ (cell, row) in
                     self.showAlert()
-                })
+                    ////print("cell.description: \(cell.description) row.description: \(row.title)")
+                    /*
+                     cell.description: <
+                         _TtGC6Eureka12ButtonCellOfSS_: 0x7fb31213bf40;
+                         baseClass = UITableViewCell; 
+                         frame = (0 605.5; 375 44); 
+                         text = 'About'; 
+                         autoresize = W; 
+                         layer = <CALayer: 0x7fb31213c7f0>
+                     > row.description: Optional("About")
+                     */
+                }
     }
     
     
@@ -141,7 +153,7 @@ class RowsExampleViewController: FormViewController {
                     }
             
             
-                <<< DateRow() { $0.value = NSDate(); $0.title = "DateRow" }
+                <<< DateRow(/* (optional) put "date" in here */) { $0.value = NSDate(); $0.title = "DateRow" }
                 
                 <<< CheckRow() {
                         $0.title = "CheckRow"
@@ -171,6 +183,8 @@ class RowsExampleViewController: FormViewController {
                         $0.title = "Who are you?"
                         $0.options = [💁🏻, 🍐, 👦🏼, 🐗, 🐼, 🐻 ]
                         $0.value = 🍐
+                    }.onChange {
+                        print(".onChange   value = \($0.value)")
                     }
             
                 <<< SegmentedRow<String>(){
@@ -360,7 +374,7 @@ class CustomCellsController : FormViewController {
                                             view.imageView.alpha = 0;
                                             UIView.animateWithDuration(2.0, animations: { [weak view] in
                                                 view?.imageView.alpha = 1
-                                            })
+                                            }) // This fades in the "Eureka" logo
                                             view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
                                             UIView.animateWithDuration(1.0, animations: { [weak view] in
                                                 view?.layer.transform = CATransform3DIdentity
