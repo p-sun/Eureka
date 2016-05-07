@@ -33,7 +33,7 @@ public enum WeekDay {
     case Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 }
 
-public class WeekDayCell : Cell<Set<WeekDay>>, CellType {
+public class WeekDayCell: Cell<Set<WeekDay>>, CellType {
     
     @IBOutlet var sundayButton: UIButton!
     @IBOutlet var mondayButton: UIButton!
@@ -42,12 +42,18 @@ public class WeekDayCell : Cell<Set<WeekDay>>, CellType {
     @IBOutlet var thursdayButton: UIButton!
     @IBOutlet var fridayButton: UIButton!
     @IBOutlet var saturdayButton: UIButton!
-        
+    
+    @IBAction func dayTapped(sender: UIButton) {
+        dayTapped(sender, day: getDayFromButton(sender))
+    }
+    
+    // All CellType automatically calls setup() and update(), I think
     public override func setup() {
         height = { 60 }
         row.title = nil
         super.setup()
-        selectionStyle = .None
+        selectionStyle = UITableViewCellSelectionStyle.None
+            // If you don't do this, you'll be able to select entire row and make it grey
         for subview in contentView.subviews {
             if let button = subview as? UIButton {
                 button.setImage(UIImage(named: "checkedDay"), forState: .Selected)
@@ -58,10 +64,22 @@ public class WeekDayCell : Cell<Set<WeekDay>>, CellType {
         }
     }
     
+    /*
+     Updates whether the buttons are 'selected' based on what is stored in the array
+     'row.value', which in this case = Optional(Set([Example.WeekDay.Wednesday, Example.WeekDay.Monday, Example.WeekDay.Friday])
+
+     b/c the WeekDayRow's row.value is defined like so,
+     <<< WeekDayRow(){
+                        $0.value = [.Monday, .Wednesday, .Friday]
+                      }
+     
+     FYI, (a ?? b) unwraps an optional a if it contains a value, or returns b if a is nil.
+     */
     public override func update() {
         row.title = nil
         super.update()
         let value = row.value
+
         mondayButton.selected = value?.contains(.Monday) ?? false
         tuesdayButton.selected = value?.contains(.Tuesday) ?? false
         wednesdayButton.selected = value?.contains(.Wednesday) ?? false
@@ -70,6 +88,7 @@ public class WeekDayCell : Cell<Set<WeekDay>>, CellType {
         saturdayButton.selected = value?.contains(.Saturday) ?? false
         sundayButton.selected = value?.contains(.Sunday) ?? false
         
+        // If row is disabled,change the alpha to a lighter colour
         mondayButton.alpha = row.isDisabled ? 0.6 : 1.0
         tuesdayButton.alpha = mondayButton.alpha
         wednesdayButton.alpha = mondayButton.alpha
@@ -78,11 +97,7 @@ public class WeekDayCell : Cell<Set<WeekDay>>, CellType {
         saturdayButton.alpha = mondayButton.alpha
         sundayButton.alpha = mondayButton.alpha
     }
-    
-    @IBAction func dayTapped(sender: UIButton) {
-        dayTapped(sender, day: getDayFromButton(sender))
-    }
-    
+
     private func getDayFromButton(button: UIButton) -> WeekDay{
         switch button{
         case sundayButton:
@@ -112,6 +127,7 @@ public class WeekDayCell : Cell<Set<WeekDay>>, CellType {
         }
     }
     
+    // for setup(), adds spaces around the buttons
     private func imageTopTitleBottom(button : UIButton){
         
         guard let imageSize = button.imageView?.image?.size else { return }
@@ -131,6 +147,7 @@ public final class WeekDayRow: Row<Set<WeekDay>, WeekDayCell>, RowType {
         super.init(tag: tag)
         displayValueFor = nil
         cellProvider = CellProvider<WeekDayCell>(nibName: "WeekDaysCell")
+            // nibName is the name of the Cutom Row and Cell/Helpers/WeekDaysCell.xib
     }
 }
 
