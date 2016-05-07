@@ -282,9 +282,10 @@ class RowsExampleViewController: FormViewController {
                 
                 <<< DecimalRow() {
                         $0.title = "DecimalRow"
-                        $0.value = 5
+                        //$0.value = 5
                         $0.formatter = DecimalFormatter()
                         $0.useFormatterDuringInput = true
+                            // If set to false, it only formats after you move to another row
                         //$0.useFormatterOnDidBeginEditing = true
                     }.cellSetup { cell, _  in
                         cell.textField.keyboardType = .NumberPad
@@ -300,6 +301,13 @@ class RowsExampleViewController: FormViewController {
                         $0.value = "+598 9898983510"
                         $0.disabled = true
                     }
+            
+                <<< PhoneRow() {
+                    $0.title = "PhoneRow (not disabled)"
+                    //$0.value = ""
+                   // $0.formatter = DecimalFormatter()
+                    //$0.useFormatterDuringInput = true // ADDED
+                }
             
                 <<< NameRow() {
                         $0.title =  "NameRow"

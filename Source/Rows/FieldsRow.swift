@@ -181,6 +181,12 @@ public class _IntRow: FieldRow<Int, IntCell> {
 public class _PhoneRow: FieldRow<String, PhoneCell> {
     public required init(tag: String?) {
         super.init(tag: tag)
+//        let phoneFormatter = NSNumberFormatter()
+//        phoneFormatter.groupingSeparator = "-"
+//        phoneFormatter.groupingSize = 4
+//        phoneFormatter.secondaryGroupingSize = 3
+//        phoneFormatter.usesGroupingSeparator = true
+//        formatter = phoneFormatter
     }
 }
 
@@ -206,11 +212,11 @@ public class _PasswordRow: FieldRow<String, PasswordCell> {
 public class _DecimalRow: FieldRow<Double, DecimalCell> {
     public required init(tag: String?) {
         super.init(tag: tag)
-        let numberFormatter = NSNumberFormatter()
-        numberFormatter.locale = .currentLocale()
-        numberFormatter.numberStyle = .DecimalStyle
-        numberFormatter.minimumFractionDigits = 2
-        formatter = numberFormatter
+//        let numberFormatter = NSNumberFormatter()
+//        numberFormatter.locale = .currentLocale()
+//        numberFormatter.numberStyle = .DecimalStyle
+//        numberFormatter.minimumFractionDigits = 2
+//        formatter = numberFormatter
     }
 }
 
@@ -381,9 +387,9 @@ public final class URLRow: _URLRow, RowType {
 
 /// A String valued row where the user can enter a phone number.
 public final class PhoneRow: _PhoneRow, RowType {
-    required public init(tag: String?) {
+    required public init(tag: String?) { // <-- tag is 'row tag value'
         super.init(tag: tag)
-        onCellHighlight { cell, row  in
+        onCellHighlight { cell, row  in // You can highlight the cell by tapping on it
             let color = cell.textLabel?.textColor
             row.onCellUnHighlight { cell, _ in
                 cell.textLabel?.textColor = color
