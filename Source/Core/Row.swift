@@ -57,7 +57,8 @@ public class RowOf<T: Equatable>: BaseRow {
 }
 
 /// Generic class that represents an Eureka row.
-public class Row<T: Equatable, Cell: CellType where Cell: TypedCellType, Cell: BaseCell, Cell.Value == T>: RowOf<T>,  TypedRowType {
+public class Row<T: Equatable, Cell: CellType where
+    Cell: TypedCellType, Cell: BaseCell, Cell.Value == T>: RowOf<T>,  TypedRowType {
     
     /// Responsible for creating the cell for this row.
     public var cellProvider = CellProvider<Cell>()

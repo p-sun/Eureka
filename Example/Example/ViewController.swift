@@ -382,7 +382,7 @@ class CustomCellsController : FormViewController {
                                      }
                 $0.header = header
             }
-            +++ Section("WeekDay cell")
+            +++ Section("WeekDay cell") 
             
                 <<< WeekDayRow(){
                     $0.value = [.Monday, .Wednesday, .Friday]
@@ -1092,6 +1092,16 @@ class ListSectionsController: FormViewController {
                 cell.falseImage = UIImage(named: "unselectedRectangle")!
             }
         }
+        
+        //// print("printing all form.values: \n \(form.values())")
+        /*
+          ["Pacific": nil, "Southern": nil, "Africa": nil, "Arctic": nil, "Indian": nil, "Atlantic": nil, "North America": nil, "Antarctica": nil, "Asia": nil, "Europe": nil, "South America": nil, "Australia": nil]
+         
+         We get back a dictionary of [row tag value: row value].
+         Only rows with a tag value will be added to the dictionary.
+         form.last! <<< ImageCheckRow<String>("Pacific"){ ... }      adds a row with the tag "Pacific".
+         */
+        
     }
     
     override func rowValueHasBeenChanged(row: BaseRow, oldValue: Any?, newValue: Any?) {
@@ -1101,7 +1111,10 @@ class ListSectionsController: FormViewController {
         else if row.section === form[1] {
             print("Mutiple Selection:\((row.section as! SelectableSection<ImageCheckRow<String>, String>).selectedRows().map({$0.baseValue}))")
         }
+        
+
     }
+    
 }
 
 class EurekaLogoViewNib: UIView {
