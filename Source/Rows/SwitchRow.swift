@@ -12,6 +12,7 @@ import Foundation
 
 public class SwitchCell : Cell<Bool>, CellType {
     
+    /// Not used
     public typealias Value = Bool
     
     required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
