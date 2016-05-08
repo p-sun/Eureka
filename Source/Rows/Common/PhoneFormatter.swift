@@ -2,7 +2,7 @@
 //  PhoneFormatter.swift
 //  Eureka
 //
-//  Created by Paige Sun on 5/8/16.
+//  Created by Paige Sun on 5/7/16.
 //  Copyright © 2016 Xmartlabs. All rights reserved.
 //
 
