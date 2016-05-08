@@ -295,22 +295,16 @@ class RowsExampleViewController: FormViewController {
                         $0.title = "URLRow"
                         $0.value = NSURL(string: "http://xmartlabs.com")
                     }
-                
-                <<< PhoneRow() {
-                        $0.title = "PhoneRow (disabled)"
-                        $0.value = "+598 9898983510"
-                        $0.disabled = true
-                    }
             
                 <<< PhoneRow() {
                     $0.title = "PhoneRow (not disabled)"
-                    //$0.value = ""
-                   // $0.formatter = DecimalFormatter()
-                    //$0.useFormatterDuringInput = true // ADDED
+                    $0.value = "15149394829"
+                    $0.formatter = PhoneFormatter()
                 }
             
                 <<< NameRow() {
-                        $0.title =  "NameRow"
+                        $0.title =  "NameRow (disabled)"
+                        $0.disabled = true
                     }
         
                 <<< PasswordRow() {

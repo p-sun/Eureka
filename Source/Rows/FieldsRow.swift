@@ -49,6 +49,19 @@ public class PhoneCell : _FieldCell<String>, CellType {
     }
 }
 
+public class DecimalCell : _FieldCell<Double>, CellType {
+    
+    required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    public override func setup() {
+        super.setup()
+        textField.autocorrectionType = .No
+        textField.keyboardType = .DecimalPad
+    }
+}
+
 public class NameCell : _FieldCell<String>, CellType {
     
     required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -89,19 +102,6 @@ public class PasswordCell : _FieldCell<String>, CellType {
         textField.autocapitalizationType = .None
         textField.keyboardType = .ASCIICapable
         textField.secureTextEntry = true
-    }
-}
-
-public class DecimalCell : _FieldCell<Double>, CellType {
-    
-    required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    public override func setup() {
-        super.setup()
-        textField.autocorrectionType = .No
-        textField.keyboardType = .DecimalPad
     }
 }
 
