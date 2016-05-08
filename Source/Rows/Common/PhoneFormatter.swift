@@ -17,9 +17,9 @@ public class PhoneFormatter : NSFormatter, FormatterProtocol {
         return true
     }
     
-    override public func stringForObjectValue(obj: AnyObject) -> String? {
-        if (obj is String) {
-            let oldString = (obj as! String)
+    override public func stringForObjectValue(objj: AnyObject) -> String? {
+        if (objj is String) {
+            let oldString = (objj as! String)
             return getNewFormattedString(oldString)
         } else {
             return nil
