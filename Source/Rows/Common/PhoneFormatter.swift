@@ -2,7 +2,7 @@
 //  PhoneFormatter.swift
 //  Eureka
 //
-//  Created by Paige Sun on 5/7/16.
+//  Created by Paige Sun on 5/7/16. Test-1 branch
 //  Copyright © 2016 Xmartlabs. All rights reserved.
 //
 
@@ -17,9 +17,9 @@ public class PhoneFormatter : NSFormatter, FormatterProtocol {
         return true
     }
     
-    override public func stringForObjectValue(obj: AnyObject) -> String? {
-        if (obj is String) {
-            let oldString = (obj as! String)
+    override public func stringForObjectValue(objk: AnyObject) -> String? {
+        if (objk is String) {
+            let oldString = (objk as! String)
             return getNewFormattedString(oldString)
         } else {
             return nil
