@@ -152,33 +152,33 @@ public final class WeekDayRow: Row<Set<WeekDay>, WeekDayCell>, RowType {
 }
 
 // NEVER MIND CAN'T BE DONE.
-//
-//// MARK: My Custom BoolTextRow
-///// A Bool valued row where the user can enter an boolean.
-//public final class TextRowBool: _TextRowBool, RowType {
-//    required public init(tag: String?) {
-//        super.init(tag: tag)
-//        onCellHighlight { cell, row  in
-//            let color = cell.textLabel?.textColor
-//            row.onCellUnHighlight { cell, _ in
-//                cell.textLabel?.textColor = color
-//            }
-//            cell.textLabel?.textColor = cell.tintColor
-//        }
-//    }
-//}
-//
-//public class _TextRowBool: FieldRow<Bool, TextCellBool> {
-//    public required init(tag: String?) {
-//        super.init(tag: tag)
-//    }
-//}
-//
-//public class TextCellBool: _FieldCell<Bool>, CellType {
-//    required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//    }
-//}
+
+// MARK: My Custom BoolTextRow
+/// A Bool valued row where the user can enter an boolean.
+public final class TextRowBool: _TextRowBool, RowType {
+    required public init(tag: String?) {
+        super.init(tag: tag)
+        onCellHighlight { cell, row  in
+            let color = cell.textLabel?.textColor
+            row.onCellUnHighlight { cell, _ in
+                cell.textLabel?.textColor = color
+            }
+            cell.textLabel?.textColor = cell.tintColor
+        }
+    }
+}
+
+public class _TextRowBool: FieldRow<Bool, TextCellBool> {
+    public required init(tag: String?) {
+        super.init(tag: tag)
+    }
+}
+
+public class TextCellBool: _FieldCell<Bool>, CellType {
+    required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+}
 
 //MARK: FloatLabelCell
 
