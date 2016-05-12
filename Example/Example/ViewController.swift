@@ -93,23 +93,11 @@ class HomeViewController : FormViewController {
                     row.presentationMode = .SegueName(segueName: "ListSectionsControllerSegue", completionCallback: nil)
                 }
         +++ Section()
-            
                 <<< ButtonRow() { (row: ButtonRow) -> Void in
                    row.title = "About"
-                }  .onCellSelection{ (cell, row) in
+                }  .onCellSelection({ (cell, row) in
                     self.showAlert()
-                    ////print("cell.description: \(cell.description) row.description: \(row.title)")
-                    /*
-                     cell.description: <
-                         _TtGC6Eureka12ButtonCellOfSS_: 0x7fb31213bf40;
-                         baseClass = UITableViewCell; 
-                         frame = (0 605.5; 375 44); 
-                         text = 'About'; 
-                         autoresize = W; 
-                         layer = <CALayer: 0x7fb31213c7f0>
-                     > row.description: Optional("About")
-                     */
-                }
+                })
     }
     
     
@@ -153,7 +141,7 @@ class RowsExampleViewController: FormViewController {
                     }
             
             
-                <<< DateRow(/* (optional) put "date" in here */) { $0.value = NSDate(); $0.title = "DateRow" }
+                <<< DateRow() { $0.value = NSDate(); $0.title = "DateRow" }
                 
                 <<< CheckRow() {
                         $0.title = "CheckRow"
@@ -183,8 +171,6 @@ class RowsExampleViewController: FormViewController {
                         $0.title = "Who are you?"
                         $0.options = [💁🏻, 🍐, 👦🏼, 🐗, 🐼, 🐻 ]
                         $0.value = 🍐
-                    }.onChange {
-                        print(".onChange   value = \($0.value)")
                     }
             
                 <<< SegmentedRow<String>(){
@@ -199,7 +185,7 @@ class RowsExampleViewController: FormViewController {
                     $0.value = "Three"
                     }.cellSetup { cell, row in
                         cell.imageView?.image = UIImage(named: "plus_image")
-                    }
+                }
             
             +++ Section("Selectors Rows Examples")
                 
@@ -210,9 +196,9 @@ class RowsExampleViewController: FormViewController {
                         $0.value = "Luis Suarez"
                     }
                 
-                <<< AlertRow<Emoji>("AlertRow") {
+                <<< AlertRow<Emoji>() {
                         $0.title = "AlertRow"
-                        $0.selectorTitle = "Who is there? (Pear hides PushRow)"
+                        $0.selectorTitle = "Who is there?"
                         $0.options = [💁🏻, 🍐, 👦🏼, 🐗, 🐼, 🐻]
                         $0.value = 👦🏼
                     }.onChange { row in
@@ -227,12 +213,6 @@ class RowsExampleViewController: FormViewController {
                         $0.options = [💁🏻, 🍐, 👦🏼, 🐗, 🐼, 🐻]
                         $0.value = 👦🏼
                         $0.selectorTitle = "Choose an Emoji!"
-                        $0.hidden = Condition.Function(["AlertRow"]) { form in
-                            if let r1 : AlertRow<Emoji> = form.rowByTag("AlertRow") {
-                                return (r1.value == 🍐)
-                            }
-                            return false
-                        }
                     }
             
         
@@ -288,10 +268,9 @@ class RowsExampleViewController: FormViewController {
                 
                 <<< DecimalRow() {
                         $0.title = "DecimalRow"
-                        //$0.value = 5
+                        $0.value = 5
                         $0.formatter = DecimalFormatter()
                         $0.useFormatterDuringInput = true
-                            // If set to false, it only formats after you move to another row
                         //$0.useFormatterOnDidBeginEditing = true
                     }.cellSetup { cell, _  in
                         cell.textField.keyboardType = .NumberPad
@@ -302,15 +281,46 @@ class RowsExampleViewController: FormViewController {
                         $0.value = NSURL(string: "http://xmartlabs.com")
                     }
             
-                <<< PhoneRow() {
-                    $0.title = "PhoneRow (not disabled)"
-                    $0.value = "15149394829"
-                    $0.formatter = PhoneFormatter()
+
+                ///Opens Https urls only by default in iOS9. To load http as well, set NSAppTransportSecurity's NSAllowsArbitraryLoads=true in info.plist.
+                <<< TextRow() {
+                    $0.title = "TextRow (tap to open link)"
+                    $0.value = "https://google.ca"
+                    $0.disabled = true
+                    }.cellUpdate { cell, _ in
+                        cell.textLabel?.textColor = UIColor.blackColor()
+                        cell.textField.textColor = UIColor.blueColor()
+                    }.onCellSelection { cell, row in
+                        guard row.value != nil else { return }
+                        
+                        var urlString = row.value!.lowercaseString
+                        
+                        if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
+                            urlString = "http://" + urlString
+                        }
+                        
+                        guard let urlNSURL = NSURL(string: urlString) else {
+                            print("link row: unable to convert String to NSURL")
+                            return
+                        }
+                        
+                        // Uncomment to open in a custom web view controller instead of in Safari
+                        /*
+                         let cwvc = CustomWebViewController()
+                         cwvc.url = urlNSURL
+                         self.navigationController?.pushViewController(cwvc, animated: true)
+                         */
+                        UIApplication.sharedApplication().openURL(urlNSURL)
                 }
             
-                <<< NameRow() {
-                        $0.title =  "NameRow (disabled)"
+                <<< PhoneRow() {
+                        $0.title = "PhoneRow (disabled)"
+                        $0.value = "+598 9898983510"
                         $0.disabled = true
+                    }
+            
+                <<< NameRow() {
+                        $0.title =  "NameRow"
                     }
         
                 <<< PasswordRow() {
@@ -382,7 +392,7 @@ class CustomCellsController : FormViewController {
                                             view.imageView.alpha = 0;
                                             UIView.animateWithDuration(2.0, animations: { [weak view] in
                                                 view?.imageView.alpha = 1
-                                            }) // This fades in the "Eureka" logo
+                                            })
                                             view.layer.transform = CATransform3DMakeScale(0.9, 0.9, 1)
                                             UIView.animateWithDuration(1.0, animations: { [weak view] in
                                                 view?.layer.transform = CATransform3DIdentity
@@ -390,7 +400,7 @@ class CustomCellsController : FormViewController {
                                      }
                 $0.header = header
             }
-            +++ Section("WeekDay cell") 
+            +++ Section("WeekDay cell")
             
                 <<< WeekDayRow(){
                     $0.value = [.Monday, .Wednesday, .Friday]
@@ -657,7 +667,6 @@ class NativeEventFormViewController : FormViewController {
                 .onChange { [weak self] row in
                     let startRow: DateTimeInlineRow! = self?.form.rowByTag("Starts")
                     if row.value?.compare(startRow.value!) == .OrderedAscending {
-                        // If end time is smaller than start time, make the background red
                         row.cell!.backgroundColor = .redColor()
                     }
                     else{
@@ -796,7 +805,7 @@ class HiddenRowsExample : FormViewController {
             +++ Section(){
                     $0.tag = "sport_s"
                     $0.hidden = "$segments != 'Sport'" // .Predicate(NSPredicate(format: "$segments != 'Sport'"))
-                } // Left is same as right. Did the SegmentedRow tagged 'segments' select the segment 'Sport'?
+                }
                 <<< TextRow(){
                     $0.title = "Which is your favourite soccer player?"
                 }
@@ -838,16 +847,6 @@ class HiddenRowsExample : FormViewController {
         
             +++ Section()
         
-                /*
-                - By default both SwitchRows are off (row.value == false)
-                - Both an entire row or an entire section can be switched to hidden
-                - Reference values of other rows by their tags to determine if a row
-                  should be hidden or visible (i.e. set $0.hidden to true or false)
-                - A predicate can be NSPredicate or a Function:
-                    *  "$rowTag != 'Sport'"
-                    * .Function(["rowTag"],    {Form->Bool in  .... }   )
-                        - [String] an array with all the tags of the rows this row depends on
-                */
                 <<< SwitchRow("Show Next Row"){
                     $0.title = $0.tag
                 }
@@ -1060,8 +1059,6 @@ class InlineRowsController: FormViewController {
             <<< PickerInlineRow<NSDate>("PickerInlineRow") { (row : PickerInlineRow<NSDate>) -> Void in
             
                     row.title = row.tag
-                
-                    // Closure that gets date from row.options[], convert date, return String w the year
                     row.displayValueFor = {
                         guard let date = $0 else{
                             return nil
@@ -1070,7 +1067,6 @@ class InlineRowsController: FormViewController {
                         return "Year \(year)"
                     }
                 
-                    // set row.options[] with ten NSDate()
                     row.options = []
                     var date = NSDate()
                     for _ in 1...10{
@@ -1079,27 +1075,6 @@ class InlineRowsController: FormViewController {
                     }
                     row.value = row.options[0]
                 }
-            
-            // Note PickerInterlineRow below is just a simplified syntax for the above
-            <<< PickerInlineRow<NSDate>("Same PickerInlineRow") {
-                
-                $0.title = $0.tag
-                $0.displayValueFor = {
-                    guard let date = $0 else{
-                        return nil
-                    }
-                    let year = NSCalendar.currentCalendar().component(.Year, fromDate: date)
-                    return "Year \(year)"
-                }
-                
-                $0.options = []
-                var date = NSDate()
-                for _ in 1...10{
-                    $0.options.append(date)
-                    date = date.dateByAddingTimeInterval(60*60*24*365)
-                }
-                $0.value = $0.options[0]
-        }
     }
 }
 
@@ -1108,11 +1083,12 @@ class ListSectionsController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let continents = ["Africa", "Antarctica", "Asia", "Australia", "Europe", "North America", "South America"]
+        
         form +++= SelectableSection<ImageCheckRow<String>, String>() { section in
             section.header = HeaderFooterView(title: "Where do you live?")
         }
         
-        let continents = ["Africa", "Antarctica", "Asia", "Australia", "Europe", "North America", "South America"]
         for option in continents {
             form.last! <<< ImageCheckRow<String>(option){ lrow in
                 lrow.title = option
@@ -1121,9 +1097,9 @@ class ListSectionsController: FormViewController {
             }
         }
         
-        form +++= SelectableSection<ImageCheckRow<String>, String>("And which of the following oceans have you taken a bath in?", selectionType: .MultipleSelection)
-        
         let oceans = ["Arctic", "Atlantic", "Indian", "Pacific", "Southern"]
+        
+        form +++= SelectableSection<ImageCheckRow<String>, String>("And which of the following oceans have you taken a bath in?", selectionType: .MultipleSelection)
         for option in oceans {
             form.last! <<< ImageCheckRow<String>(option){ lrow in
                 lrow.title = option
@@ -1134,25 +1110,8 @@ class ListSectionsController: FormViewController {
                 cell.falseImage = UIImage(named: "unselectedRectangle")!
             }
         }
-        
-        //// print("printing all form.values: \n \(form.values())")
-        /*
-          ["Pacific": nil, "Southern": nil, "Africa": nil, "Arctic": nil, "Indian": nil, "Atlantic": nil, "North America": nil, "Antarctica": nil, "Asia": nil, "Europe": nil, "South America": nil, "Australia": nil]
-         
-         We get back a dictionary of [row tag value: row value].
-         Only rows with a tag value will be added to the dictionary.
-         form.last! <<< ImageCheckRow<String>("Pacific"){ ... }      adds a row with the tag "Pacific".
-         
-         
-         row.selectableValue is where the value of the row will be permanently stored. 
-         row.value determines if the row is selected or not - its value is either 'selectableValue' or nil.
-            i.e. A row's row.selectableValue is "Arctic". It's row.value is nil or "Arctic".
-         
-         */
-        
     }
     
-    // Return all selected row(s) for single & multipleSelection w section.selectedRow() & section.selectedRows()
     override func rowValueHasBeenChanged(row: BaseRow, oldValue: Any?, newValue: Any?) {
         if row.section === form[0] {
             print("Single Selection:\((row.section as! SelectableSection<ImageCheckRow<String>, String>).selectedRow()?.baseValue)")
@@ -1160,13 +1119,9 @@ class ListSectionsController: FormViewController {
         else if row.section === form[1] {
             print("Mutiple Selection:\((row.section as! SelectableSection<ImageCheckRow<String>, String>).selectedRows().map({$0.baseValue}))")
         }
-        
-
     }
-    
 }
 
-// Both of the LogoView and the LogoViewNib do the same thing, but the LogoView Pattern seems to be cleaner?
 class EurekaLogoViewNib: UIView {
 
     @IBOutlet weak var imageView: UIImageView!
