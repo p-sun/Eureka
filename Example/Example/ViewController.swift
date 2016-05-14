@@ -123,9 +123,28 @@ class RowsExampleViewController: FormViewController {
         super.viewDidLoad()
         
         URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blueColor() }
-        LabelRow.defaultCellUpdate = { cell, row in cell.detailTextLabel?.textColor = .orangeColor()  }
         CheckRow.defaultCellSetup = { cell, row in cell.tintColor = .orangeColor() }
         DateRow.defaultRowInitializer = { row in row.minimumDate = NSDate() }
+
+        // MARK: My own testing
+        /* The defaults are called in this order: Initializer -> Setup -> Update
+           Then tapping the row calls: Highlight and/or Selection?
+                * Some rows don't have default on cell highlight: i.e. LabelRow
+        */
+        LabelRow.defaultRowInitializer = { row in
+            print("default ROW initializer")
+        }
+        LabelRow.defaultCellSetup = { cell, row in
+            print("default CELL setup")
+            cell.detailTextLabel?.textColor = .orangeColor()
+        }
+        LabelRow.defaultCellUpdate = { cell, row in
+            print("default CELL update")
+            // cell.detailTextLabel?.textColor = .blueColor() // Will override previous .orangeColor
+            // Use Update instead of Setup if cell depends on variables not present on cell creation time.
+        }
+        LabelRow.defaultOnCellHighlight = { cell, row in print("default on cell highlight")}
+        LabelRow.defaultOnCellUnHighlight = { cell, row in print("default on cell UNhighlight")}
         
         form =
             
@@ -137,9 +156,9 @@ class RowsExampleViewController: FormViewController {
                     }
                     .onCellSelection { cell, row in
                         row.title = (row.title ?? "") + " 🇺🇾 "
-                        row.reload() // or row.updateCell()
+                        row.reload() // Or row.update()
+                            // Both .reload and .update  calls the .defaultCellUpdate
                     }
-            
             
                 <<< DateRow() { $0.value = NSDate(); $0.title = "DateRow" }
                 
