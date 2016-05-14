@@ -122,29 +122,8 @@ class RowsExampleViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blueColor() }
-        CheckRow.defaultCellSetup = { cell, row in cell.tintColor = .orangeColor() }
-        DateRow.defaultRowInitializer = { row in row.minimumDate = NSDate() }
-
-        // MARK: My own testing
-        /* The defaults are called in this order: Initializer -> Setup -> Update
-           Then tapping the row calls: Highlight and/or Selection?
-                * Some rows don't have default on cell highlight: i.e. LabelRow
-        */
-        LabelRow.defaultRowInitializer = { row in
-            print("default ROW initializer")
-        }
-        LabelRow.defaultCellSetup = { cell, row in
-            print("default CELL setup")
-            cell.detailTextLabel?.textColor = .orangeColor()
-        }
-        LabelRow.defaultCellUpdate = { cell, row in
-            print("default CELL update")
-            // cell.detailTextLabel?.textColor = .blueColor() // Will override previous .orangeColor
-            // Use Update instead of Setup if cell depends on variables not present on cell creation time.
-        }
-        LabelRow.defaultOnCellHighlight = { cell, row in print("default on cell highlight")}
-        LabelRow.defaultOnCellUnHighlight = { cell, row in print("default on cell UNhighlight")}
+        /// To share a certain set of color initialization between several view controllers, you can make a separrate file like so to set the default cell and row colors
+        self.initializeColors()
         
         form =
             
@@ -157,7 +136,11 @@ class RowsExampleViewController: FormViewController {
                     .onCellSelection { cell, row in
                         row.title = (row.title ?? "") + " 🇺🇾 "
                         row.reload() // Or row.update()
-                            // Both .reload and .update  calls the .defaultCellUpdate
+                         // Both row.reload & .update  calls the .defaultCellUpdate defined above this form
+                    }.cellUpdate{ cell, row in
+                        print("CELL UPDATE 2")
+                    }.cellUpdate{ cell, row in
+                        print("CELL UPDATE 3") // CELL UPDATE 1 & 3 will run, but not UPDATE 2
                     }
             
                 <<< DateRow() { $0.value = NSDate(); $0.title = "DateRow" }

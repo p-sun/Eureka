@@ -413,7 +413,7 @@ public struct InlineRowHideOptions : OptionSetType {
 public class FormViewController : UIViewController, FormViewControllerProtocol {
     
     @IBOutlet public var tableView: UITableView?
-    
+//    
     private lazy var _form : Form = { [weak self] in
         let form = Form()
         form.delegate = self
