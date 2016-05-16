@@ -203,6 +203,8 @@ class RowsExampleViewController: FormViewController {
                         $0.selectorTitle = "Who is there?"
                         $0.options = [💁🏻, 🍐, 👦🏼, 🐗, 🐼, 🐻]
                         $0.value = 👦🏼
+                        //$0.displayValueFor = { value in "display value" }
+                            // This will change the value to "display value"
                     }.onChange { row in
                         print(row.value)
                     }
