@@ -11,7 +11,7 @@ import Eureka
 
 extension FormViewController {
     
-    func initializeColors() {
+    func initializeColors(customTint: UIColor) {
         print("Init for checkrow")
         
         URLRow.defaultCellUpdate = { cell, row in cell.textField.textColor = .blueColor() }
@@ -28,7 +28,7 @@ extension FormViewController {
         }
         LabelRow.defaultCellSetup = { cell, row in
             print("default CELL setup")
-            cell.detailTextLabel?.textColor = .orangeColor()
+            cell.detailTextLabel?.textColor = customTint
         }
         LabelRow.defaultCellUpdate = { cell, row in
             print("default CELL UPDATE 1")

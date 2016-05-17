@@ -123,7 +123,7 @@ class RowsExampleViewController: FormViewController {
         super.viewDidLoad()
         
         /// To share a certain set of color initialization between several view controllers, you can make a separrate file like so to set the default cell and row colors
-        self.initializeColors()
+        self.initializeColors(UIColor.blueColor())
         
         form =
             
